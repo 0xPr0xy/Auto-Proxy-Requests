@@ -47,9 +47,9 @@ class ProxyScraper:
 		r = request.get(proxylist_url, headers=headers)
 		self.parse_document(r.content, url)
 
-	def parse_document(self, html, url):
+	def parse_document(self, xml, url):
 		
-		soup = BeautifulSoup(html)
+		soup = BeautifulSoup(xml)
 		soup.prettify()
 		
 		for proxy in soup.findAll('prx:proxy'):
